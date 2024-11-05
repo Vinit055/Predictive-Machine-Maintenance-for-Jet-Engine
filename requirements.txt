@@ -1,0 +1,7 @@
+Flask
+requests
+xgboost
+pandas
+numpy
+Flask-Cors
+scikit-learn

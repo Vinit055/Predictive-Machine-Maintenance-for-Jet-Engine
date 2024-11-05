@@ -4,7 +4,6 @@ import UserDashboard from "./components/UserDashboard";
 import Login from "./Login";
 import Register from "./Register";
 import NotFound from "./components/NotFound";
-import Quiz from "./components/Quiz";
 import ProfilePage from "./components/ProfilePage";
 import CalendarPage from "./components/CalendarPage";
 import EngineAnalysisDashboard from "./components/EngineAnalysisDashboard";
@@ -17,7 +16,6 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<UserDashboard />} />
-        <Route path="/quiz" element={<Quiz />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/reports" element={<EngineAnalysisDashboard />} />

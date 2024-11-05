@@ -43,7 +43,7 @@ const ForcastChart = () => {
         setSensordata(new_data);
         const rull = response.data.rul;
         if (rull < 0) {
-          alert("Schedule maintenence 5");
+          alert("Schedule maintenence");
         }
 
         setmaxy(Math.max(maxy, response.data.rul));
@@ -164,25 +164,32 @@ const ForcastChart = () => {
     <>
       <div className="flex justify-center items-center">
         {/* First Graph: Live Sensor Data */}
-        <div className="flex flex-col justify-center items-center mt-4" style={{ width: "50%", minHeight: "400px" }}>
+        <div
+          className="flex flex-col justify-center items-center mt-4"
+          style={{ width: "50%", minHeight: "400px" }}
+        >
           <div className="font-bold text-3xl text-center">Live sensor data</div>
           <div className="p-2 bg-white rounded shadow" style={containerStyle}>
             <Line data={data} options={options} />
           </div>
         </div>
-  
+
         {/* Second Graph: RUL */}
-        <div className="flex flex-col justify-center items-center mt-4" style={{ width: "50%", minHeight: "400px" }}>
+        <div
+          className="flex flex-col justify-center items-center mt-4"
+          style={{ width: "50%", minHeight: "400px" }}
+        >
           <div className="font-bold text-3xl text-center">RUL</div>
           <div className="p-2 bg-white rounded shadow" style={containerStyle}>
             <Line data={data1} options={options} ticks={[0, 25, 50, 75, 100]} />
           </div>
-          <div className="text-3xl font-bold mt-4">The RUL is: {rul} cycles</div>
+          <div className="text-3xl font-bold mt-4">
+            The RUL is: {rul} cycles
+          </div>
         </div>
       </div>
     </>
   );
-  
 };
 
 export default ForcastChart;
