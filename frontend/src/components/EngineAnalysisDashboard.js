@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import {
   ResponsiveContainer,
   CartesianGrid,
@@ -15,8 +14,10 @@ import {
   Bar,
 } from "recharts";
 import HeatMap from "react-heatmap-grid"; // Import Heatmap Grid
+import { Link, useNavigate } from "react-router-dom";
 
 const EngineAnalysisDashboard = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [sensorData, setSensorData] = useState([]);
   const [sensorStats, setSensorStats] = useState([]);
@@ -127,17 +128,35 @@ const EngineAnalysisDashboard = () => {
 
   const sensorColumns = Array.from({ length: 21 }, (_, i) => `sensor_${i + 1}`);
 
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        // Clear local storage
+        localStorage.removeItem("token");
+        localStorage.removeItem("type");
+        // Navigate to home page
+        navigate("/");
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
+
   return (
     <div>
       <nav className="bg-navy-700 p-4 text-white shadow-md">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold">Reports</h1>
           <ul className="flex space-x-4">
-            <li>
-              <Link to="/" className="hover:text-gray-300 text-lg">
-                Home
-              </Link>
-            </li>
             <li>
               <Link to="/dashboard" className="hover:text-gray-300 text-lg">
                 Dashboard
@@ -147,6 +166,14 @@ const EngineAnalysisDashboard = () => {
               <Link to="/calendar" className="hover:text-gray-300 text-lg">
                 Calendar
               </Link>
+            </li>
+            <li>
+              <button
+                onClick={handleLogout}
+                className="hover:text-gray-300 text-lg"
+              >
+                Logout
+              </button>
             </li>
           </ul>
         </div>

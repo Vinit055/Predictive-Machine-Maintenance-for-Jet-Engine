@@ -123,16 +123,38 @@
 
 import React, { useState } from "react";
 import Calendar from "react-calendar";
-import { Link } from "react-router-dom";
 import "react-calendar/dist/Calendar.css"; // Import calendar styles
 import { FiCalendar, FiPlusCircle } from "react-icons/fi"; // For icons
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Link, useNavigate } from "react-router-dom";
 
 const CalendarPage = () => {
+  const navigate = useNavigate();
   const [date, setDate] = useState(new Date());
   const [reminders, setReminders] = useState([]);
   const [reminderText, setReminderText] = useState("");
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("type");
+        navigate("/");
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
 
   const handleDateChange = (selectedDate) => {
     setDate(selectedDate);
@@ -173,11 +195,6 @@ const CalendarPage = () => {
           <h1 className="text-2xl font-bold">Maintenance Calendar</h1>
           <ul className="flex space-x-4">
             <li>
-              <Link to="/" className="hover:text-gray-300 text-lg">
-                Home
-              </Link>
-            </li>
-            <li>
               <Link to="/dashboard" className="hover:text-gray-300 text-lg">
                 Dashboard
               </Link>
@@ -186,6 +203,14 @@ const CalendarPage = () => {
               <Link to="/reports" className="hover:text-gray-300 text-lg">
                 Reports
               </Link>
+            </li>
+            <li>
+              <button
+                onClick={handleLogout}
+                className="hover:text-gray-300 text-lg"
+              >
+                Logout
+              </button>
             </li>
           </ul>
         </div>

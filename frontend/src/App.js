@@ -9,6 +9,7 @@ import CalendarPage from "./components/CalendarPage";
 import EngineAnalysisDashboard from "./components/EngineAnalysisDashboard";
 import EnginePerformance from "./components/EnginePerformance";
 import Feedback from "./components/Feedback";
+import AuthForm from "./components/AuthForm";
 function App() {
   return (
     <div>
@@ -21,7 +22,8 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/reports" element={<EngineAnalysisDashboard />} />
-        <Route path="/performance" element={<EnginePerformance />} />
+        {/* <Route path="/performance" element={<EnginePerformance />} /> */}
+        <Route path="/auth" element={<AuthForm />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
