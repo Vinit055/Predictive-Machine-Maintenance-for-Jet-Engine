@@ -84,7 +84,7 @@
 // ----------------------------------
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import ForcastChart from "./ForcastChart.js";
+import ForcastChart from "./ForecastChart.js";
 
 const UserDashboard = () => {
   const navigate = useNavigate();

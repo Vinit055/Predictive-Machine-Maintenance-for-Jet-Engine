@@ -5,3 +5,7 @@ pandas
 numpy
 Flask-Cors
 scikit-learn
+python-dotenv
+flask_jwt_extended
+auth
+pymango

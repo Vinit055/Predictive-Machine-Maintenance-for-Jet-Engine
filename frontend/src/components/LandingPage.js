@@ -259,11 +259,11 @@ const LandingPage = () => {
           Utilize AI and ML to prevent downtime and optimize maintenance
           schedules.
         </p>
-        <button className="bg-navy-900 text-white font-bold py-2 px-4 rounded hover:bg-navy-800">
-          <Link to="/dashboard" className="hover:text-gray-300">
+        <Link to="/dashboard" className="hover:text-gray-300">
+          <button className="bg-navy-900 text-white font-bold py-2 px-4 rounded hover:bg-navy-800">
             Get Started
-          </Link>
-        </button>
+          </button>
+        </Link>
       </div>
 
       {/* Features Section */}

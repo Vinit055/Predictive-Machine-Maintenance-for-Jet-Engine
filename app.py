@@ -1,18 +1,32 @@
 from flask import Flask, request, jsonify
 import pickle
+import os
 import xgboost as xgb
 import pandas as pd
 import numpy as np
 from flask_cors import CORS, cross_origin
+from flask_jwt_extended import JWTManager
 import requests
 import logging
+from dotenv import load_dotenv
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+# Load environment variables from .env file
+load_dotenv()
+
 app = Flask(__name__)
 CORS(app, support_credentials=True)
+
+# Setup JWT for authentication
+jwt = JWTManager(app)
+
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+# Register Auth Blueprint
+from auth import auth_bp
+app.register_blueprint(auth_bp)
 
 # Define column names - using engine_no to match the model's expectations
 COLUMN_NAMES = [
