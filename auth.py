@@ -1,9 +1,11 @@
+import datetime
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import create_access_token, jwt_required
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
 from pymongo import MongoClient
 import os
 import logging
+from bson.objectid import ObjectId
 
 # Set up Blueprint for auth routes
 auth_bp = Blueprint('auth', __name__)
@@ -13,6 +15,7 @@ mongo_uri = os.getenv("MONGO_URI")
 client = MongoClient(mongo_uri)
 db = client['capstone_db']  # Use the name of your database
 users_collection = db['users']
+reminders_collection = db['reminders']
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -59,6 +62,44 @@ def logout():
         "message": "Logout successful",
         "deleteLocalStorage": True
     }), 200
+
+@auth_bp.route('/api/reminders', methods=['POST'])
+@jwt_required()
+def save_reminder():
+    user_id = get_jwt_identity()
+    data = request.get_json()
+    reminder = {
+        'user_id': user_id,
+        'date': datetime.datetime.fromisoformat(data['date']),
+        'text': data['text'],
+    }
+    inserted_reminder = reminders_collection.insert_one(reminder)
+    return jsonify({
+        '_id': str(inserted_reminder.inserted_id),
+        'date': data['date'],
+        'text': data['text'],
+    })
+
+@auth_bp.route('/api/reminders', methods=['GET'])
+@jwt_required()
+def get_reminders():
+    user_id = get_jwt_identity()
+    reminders = list(reminders_collection.find({'user_id': user_id}))
+    return jsonify([{
+        '_id': str(reminder['_id']),
+        'date': reminder['date'].isoformat(),
+        'text': reminder['text'],
+    } for reminder in reminders])
+
+@auth_bp.route('/api/reminders/<reminder_id>', methods=['DELETE'])
+@jwt_required()
+def delete_reminder(reminder_id):
+    user_id = get_jwt_identity()
+    result = reminders_collection.delete_one({'_id': ObjectId(reminder_id), 'user_id': user_id})
+    if result.deleted_count == 1:
+        return jsonify({'message': 'Reminder deleted successfully'})
+    else:
+        return jsonify({'message': 'Reminder not found or not owned by the user'}), 404
 
 # Protected route to test JWT access
 @auth_bp.route('/protected', methods=['GET'])
