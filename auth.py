@@ -11,7 +11,7 @@ auth_bp = Blueprint('auth', __name__)
 # Connect to MongoDB using the URI from the environment
 mongo_uri = os.getenv("MONGO_URI")
 client = MongoClient(mongo_uri)
-db = client['your_database_name']  # Use the name of your database
+db = client['capstone_db']  # Use the name of your database
 users_collection = db['users']
 
 # Configure logging
@@ -51,6 +51,14 @@ def login():
     access_token = create_access_token(identity=username)
     logger.info(f"User '{username}' logged in successfully.")
     return jsonify(access_token=access_token), 200
+
+@auth_bp.route('/logout', methods=['POST'])
+def logout():
+    logger.info("User logged out successfully.")
+    return jsonify({
+        "message": "Logout successful",
+        "deleteLocalStorage": True
+    }), 200
 
 # Protected route to test JWT access
 @auth_bp.route('/protected', methods=['GET'])
