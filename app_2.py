@@ -54,8 +54,8 @@ logger.info(f"Loaded data shape: {samples.shape}")
 logger.info(f"Columns: {samples.columns}")
 
 def telegram_notifier(message="Maintenance needed"):
-    TOKEN = ""
-    CHAT_ID = ""
+    TOKEN = os.getenv('BOT_TOKEN_ID')
+    CHAT_ID = os.getenv('BOT_CHAT_ID')
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage?chat_id={CHAT_ID}&text={message}"
     try:
         res2 = requests.post(url)
@@ -106,7 +106,7 @@ def calculate():
             
             logger.info(f"Final RUL prediction: {final_rul}")
             
-            if ans1 < 0.4:
+            if ans1 < 0.2:
                 logger.warning("Low RUL detected - sending maintenance notification")
                 telegram_notifier("Quick maintenance needed")
             

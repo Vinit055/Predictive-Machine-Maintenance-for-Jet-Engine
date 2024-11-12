@@ -19,7 +19,7 @@ const ForcastChart = () => {
   let maxY = 0;
 
   // Define the threshold
-  const threshold = 40; // Adjust the threshold as needed
+  const threshold = 20; // Adjust the threshold as needed
 
   // Determine the color based on the threshold and the maximum value
   const [alertText, setalertText] = useState("");
@@ -28,7 +28,7 @@ const ForcastChart = () => {
     const fetchData = async () => {
       try {
         // Make the GET request
-        const response = await axios.get("http://localhost:5000/predict");
+        const response = await axios.get("/predict");
         // Handle the response data
         // const newx=response.data.time;
         // console.log("time is:",newx );
@@ -69,7 +69,7 @@ const ForcastChart = () => {
     fetchData();
 
     // Set up the interval to call fetchData every 10 seconds
-    const intervalId = setInterval(fetchData, 1000);
+    const intervalId = setInterval(fetchData, 5000);
 
     // Clean up the interval to prevent memory leaks
     return () => clearInterval(intervalId);
@@ -131,7 +131,7 @@ const ForcastChart = () => {
         type: "line",
         mode: "horizontal",
         scaleID: "y-axis-0",
-        value: 40, // Y-coordinate where the line will be drawn
+        value: threshold, // Y-coordinate where the line will be drawn
         borderColor: "red", // Color of the line
         borderWidth: 2, // Width of the line
       },
@@ -145,11 +145,11 @@ const ForcastChart = () => {
     },
     scales: {
       y: {
-        beginAtZero: true, // Start the y-axis from zero
+        beginAtZero: false, // Start the y-axis from zero
         grid: {
           color: (context) => {
             // Change the grid line color for a specific value (e.g., 40)
-            return context.tick.value === 40 ? "red" : "rgba(0, 0, 0, 0.1)"; // Red color for 40, default color for others
+            return context.tick.value === threshold ? "red" : "rgba(0, 0, 0, 0.1)"; // Red color for 40, default color for others
           },
         },
       },
